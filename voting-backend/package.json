@@ -1,0 +1,24 @@
+{
+  "name": "voting-backend",
+  "version": "1.0.0",
+  "description": "Online Voting System Backend using Node.js and Cassandra",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js"
+  },
+  "keywords": [
+    "voting",
+    "cassandra",
+    "node",
+    "express"
+  ],
+  "author": "Vijay",
+  "license": "ISC",
+  "dependencies": {
+    "cassandra-driver": "^4.8.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.6.1",
+    "express": "^4.22.1"
+  }
+}
