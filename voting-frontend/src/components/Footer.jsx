@@ -1,17 +1,18 @@
 export default function Footer() {
   return (
     <footer style={styles.footer}>
-      <p>© 2025 Online Voting System | Built using Cassandra & React</p>
+      © 2025 Online Voting System | Cassandra & React
     </footer>
   );
 }
 
 const styles = {
   footer: {
-    textAlign: 'center',
-    padding: '15px',
-    background: '#111',
+    width: '100%',
+    background: '#111827',
     color: 'white',
-    marginTop: '50px'
+    textAlign: 'center',
+    padding: '16px',
+    marginTop: '60px'
   }
 };

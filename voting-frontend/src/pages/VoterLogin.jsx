@@ -17,28 +17,39 @@ export default function VoterLogin({ setUser }) {
       setUser(res.data.user);
       navigate('/vote');
     } catch {
-      setMsg('Invalid login');
+      setMsg('Invalid login credentials');
     }
   };
 
   return (
-    <div style={styles.box}>
+    <div style={styles.container}>
       <h2>Voter Login</h2>
-      {msg && <p>{msg}</p>}
-      <form onSubmit={handleLogin}>
-        <input placeholder="Email" onChange={e => setEmail(e.target.value)} />
-        <input placeholder="Password" type="password" onChange={e => setPassword(e.target.value)} />
-        <button>Login</button>
+      {msg && <p style={{ color: 'red' }}>{msg}</p>}
+
+      <form onSubmit={handleLogin} style={styles.form}>
+        <input placeholder="Email" onChange={e => setEmail(e.target.value)} required />
+        <input placeholder="Password" type="password" onChange={e => setPassword(e.target.value)} required />
+        <button type="submit" style={{ width: '100%' }}>Login</button>
       </form>
-      <p>No account? <Link to="/register">Register</Link></p>
+
+      <p style={{ marginTop: '10px' }}>
+        No account? <Link to="/register" style={{ color: '#2563eb' }}>Register</Link>
+      </p>
     </div>
   );
 }
 
 const styles = {
-  box: {
-    maxWidth: '300px',
+  container: {
+    maxWidth: '400px',
     margin: '80px auto',
+    padding: '30px',
+    background: 'white',
+    borderRadius: '10px',
+    boxShadow: '0 0 15px rgba(0,0,0,0.1)',
     textAlign: 'center'
+  },
+  form: {
+    marginTop: '20px'
   }
 };

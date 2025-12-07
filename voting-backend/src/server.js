@@ -3,6 +3,8 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import client from './db/cassandra.js';
+import adminRoutes from './routes/adminRoutes.js';
+import adminVoterRoutes from './routes/adminVoterRoutes.js';
 
 import authRoutes from './routes/authRoutes.js';
 import candidateRoutes from './routes/candidateRoutes.js';
@@ -25,6 +27,8 @@ app.use('/api/auth', authRoutes);
 app.use('/api/candidates', candidateRoutes);
 app.use('/api/vote', voteRoutes);
 app.use('/api/results', resultRoutes);
+app.use('/api/admin', adminRoutes);
+app.use('/api/admin/voters', adminVoterRoutes);
 
 // Start server only after Cassandra connects
 client

@@ -1,13 +1,14 @@
-// src/pages/Vote.jsx
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const API_BASE = 'http://localhost:5000/api';
 
 export default function Vote({ user }) {
   const [candidates, setCandidates] = useState([]);
   const [msg, setMsg] = useState('');
+  const [voted, setVoted] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCandidates = async () => {
@@ -26,35 +27,97 @@ export default function Vote({ user }) {
     try {
       const res = await axios.post(`${API_BASE}/vote`, {
         user_id: user.user_id,
-        candidate_id,
+        candidate_id
       });
+
       setMsg(res.data.message);
+      setVoted(true);
     } catch (err) {
       setMsg(err.response?.data?.message || 'Vote failed');
     }
   };
 
   return (
-    <div>
-      <h2>Cast Your Vote</h2>
-      {msg && <p>{msg}</p>}
+    <div style={styles.page}>
+      <div style={styles.card}>
+        <h2 style={{ color: '#1e40af' }}>🗳️ Cast Your Vote</h2>
+        <p style={{ color: '#555', marginBottom: '10px' }}>
+          Logged in as <strong>{user?.name}</strong>
+        </p>
 
-      {user.has_voted && (
-        <p>You already voted (according to initial login). You can try voting again to test API.</p>
-      )}
+        {msg && (
+          <p style={{ color: msg.includes('success') ? 'green' : 'red' }}>
+            {msg}
+          </p>
+        )}
 
-      <ul>
-        {candidates.map((c) => (
-          <li key={c.candidate_id}>
-            {c.name} ({c.party}){' '}
-            <button onClick={() => handleVote(c.candidate_id)}>Vote</button>
-          </li>
-        ))}
-      </ul>
+        <div style={styles.list}>
+          {candidates.map((c) => (
+            <div key={c.candidate_id} style={styles.candidateBox}>
+              <div>
+                <h4>{c.name}</h4>
+                <p style={{ color: '#666' }}>{c.party}</p>
+              </div>
 
-      <p>
-        <Link to="/results">View Results</Link>
-      </p>
+              <button
+                disabled={voted}
+                style={{
+                  ...styles.voteBtn,
+                  background: voted ? '#9ca3af' : '#2563eb'
+                }}
+                onClick={() => handleVote(c.candidate_id)}
+              >
+                {voted ? 'Voted' : 'Vote'}
+              </button>
+            </div>
+          ))}
+        </div>
+
+        <button style={styles.resultBtn} onClick={() => navigate('/results')}>
+          📊 View Results
+        </button>
+      </div>
     </div>
   );
 }
+
+const styles = {
+  page: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    minHeight: '70vh'
+  },
+  card: {
+    width: '450px',
+    background: 'white',
+    padding: '30px',
+    borderRadius: '12px',
+    boxShadow: '0 8px 25px rgba(0,0,0,0.15)',
+    textAlign: 'center'
+  },
+  list: {
+    marginTop: '20px'
+  },
+  candidateBox: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: '15px',
+    borderBottom: '1px solid #e5e7eb'
+  },
+  voteBtn: {
+    padding: '8px 18px',
+    fontSize: '14px',
+    borderRadius: '6px',
+    cursor: 'pointer'
+  },
+  resultBtn: {
+    width: '100%',
+    marginTop: '20px',
+    background: '#16a34a',
+    padding: '12px',
+    fontSize: '15px',
+    borderRadius: '8px'
+  }
+};
